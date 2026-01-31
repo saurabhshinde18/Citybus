@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Announcement - City Bus Audio Scheduler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-active {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            border-right: 3px solid #2563eb;
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .btn-broadcast:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Navigation -->
+    <div class="flex h-screen">
+        <div class="w-64 bg-white border-r border-gray-200 shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900">CityBus</h2>
+                        <p class="text-xs text-gray-500">Audio Control</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-2">
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="audio-management.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 9a2 2 0 100-4 2 2 0 000 4z"></path>
+                    </svg>
+                    <span>Audio Files</span>
+                </a>
+                <a href="schedule-management.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"></path>
+                    </svg>
+                    <span>Schedules</span>
+                </a>
+                <a href="bus-management.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7H5V5z"></path>
+                    </svg>
+                    <span>Buses & Routes</span>
+                </a>
+                <a href="emergency.html" class="sidebar-active flex items-center space-x-3 px-4 py-3 rounded-lg font-medium">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"></path>
+                    </svg>
+                    <span>Emergency Alert</span>
+                </a>
+            </nav>
+
+            <!-- Bottom User Section -->
+            <div class="absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4 bg-white">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <span class="text-sm font-bold text-blue-600">AD</span>
+                        </div>
+                        <div class="text-sm">
+                            <p class="font-medium text-gray-900">Admin User</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                    </div>
+                    <button id="logoutBtn" class="text-gray-400 hover:text-red-500">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-white border-b border-gray-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Emergency Announcement</h1>
+                        <p class="text-gray-600 mt-1">Broadcast urgent messages to all buses</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 max-w-4xl">
+                <!-- Alert Banner -->
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded mb-8">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-red-800">
+                                This panel allows you to broadcast emergency announcements. Messages are sent to all buses with highest priority and will interrupt any scheduled announcements.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Broadcast Card -->
+                <div class="bg-white rounded-lg border border-gray-200 p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Broadcast</h2>
+
+                    <form id="emergencyForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Audio Message</label>
+                            <select id="emergencyAudioSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                                <option value="">Choose an emergency audio file...</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-2">Only audio files marked as "Emergency" category will appear here</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Target Buses</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center">
+                                    <input type="radio" name="busTarget" value="all" class="w-4 h-4" checked>
+                                    <span class="ml-3 text-gray-700">All Buses (Immediate Broadcast)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="busTarget" value="route" class="w-4 h-4">
+                                    <span class="ml-3 text-gray-700">Specific Route</span>
+                                </label>
+                            </div>
+
+                            <div id="routeSelector" class="hidden mt-4">
+                                <select id="targetRoute" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                    <option value="">Select route...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
+                            <select id="priorityLevel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="High">High (Interrupts all schedules)</option>
+                                <option value="Critical">Critical (Overrides everything)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirmation Message</label>
+                            <textarea id="confirmationMessage" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Enter notes about this emergency announcement..."></textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-4 pt-6">
+                            <button 
+                                type="button" 
+                                id="previewBtn"
+                                class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition"
+                            >
+                                Preview Audio
+                            </button>
+                            <button 
+                                type="submit"
+                                id="broadcastBtn"
+                                class="btn-broadcast flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition"
+                            >
+                                <svg class="w-5 h-5 inline-block mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
+                                </svg>
+                                BROADCAST NOW
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Recent Broadcasts -->
+                <div class="bg-white rounded-lg border border-gray-200 p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Broadcasts</h2>
+                    <div id="broadcastHistory" class="space-y-4">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div id="noBroadcasts" class="text-center py-8 text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"></path>
+                        </svg>
+                        <p>No emergency broadcasts yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/emergency.js"></script>
+</body>
+</html>
